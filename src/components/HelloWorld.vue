@@ -10,42 +10,6 @@
         </div>
         <h3 color="textoGris">Recetas recomendadas</h3>
       </v-col>
-      <!-- <v-row>
-        <div v-for = "(receta, i) in libroDeCocina" :key="i" class="col-12 col-lg-4 p-4 my-3 m-md-4 card-receta-home">
-          <div class="row div-categ d-flex">
-            <div class="col-5 col-sm-2">
-              <div class="ps-2 pt-1">
-                <v-img src="./img/icons/meal_icon80.png" alt="icono cubiertos"></v-img>
-              </div>
-            </div>
-            <div class="col-7 col-sm-10 pt-4">
-              <span class="p-categoria">{{receta.categoria | mayusculaPrimeraLetra}}</span>
-            </div>
-          </div>
-          <div class="row d-flex">
-            <div class="col-12 order-2 order-lg-1">
-              <span class="p-nombre-receta">{{receta.nombre | mayusculaPrimeraLetra}}</span>
-                <div class="row d-flex pb-3 pe-2">
-                  <div class="col-8 col-md-4 pt-4">
-                    <p class="me-gusta">Me gusta</p>
-                  </div>
-                  <div class="col-4 col-md-7 pt-3 icono-corazon" @click="darMeGusta(i)">
-                    <v-img v-if="receta.meGusta " src="./img/icons/heart_icon_filled.png" alt="icono corazon"></v-img>
-                    <v-img v-else src="./img/icons/heart_icon.png" alt="icono corazon"></v-img>
-                  </div>
-
-                </div>
-            </div>
-            <div class="col-12 p-3 order-1 order-lg-2">
-              <v-img class="img-fluid img-card-receta" :src="receta.imagen_ruta"></v-img>
-            </div>
-          </div>
-          <div class="row d-flex justify-content-center">
-            <button class="col-5 p-2 boton-card-receta" data-bs-toggle="modal" data-bs-target="#modalReceta" @click="seleccionarReceta(receta)">Ver más</button>
-          </div>
-        </div>
-      </v-row> -->
-
       <v-card
         
         class="mx-auto my-12"
@@ -76,7 +40,6 @@
             {{receta.cantMeGusta}}
           </div>
         </v-row>
-
       </v-card-text>
 
       <v-divider class="mx-4"></v-divider>
@@ -156,7 +119,14 @@
       </v-card>
     </v-dialog>
 
- 
+    <v-row>
+      <v-col cols="12" class=" div-h3 p-2 mt-5 d-flex">
+        <div class="ps-2 pt-1">
+          <img src="./../../public/img/icons/star_icon60.png" alt="icono estrella">
+        </div>
+        <h3 color="textoGris">Mis Recetas <span v-if="miLibroDeRecetas.length == 0">(Aún no tenes recetas cargadas)</span></h3>
+      </v-col>
+    </v-row>
   </v-row>
   </v-container>
 </template>
