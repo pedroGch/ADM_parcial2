@@ -1,5 +1,16 @@
 <template>
-  <div class="cargarReceta">
-    <h1>Aca vas a cargar tus recetas</h1>
-  </div>
+  <receta-form></receta-form>
 </template>
+
+<script>
+  import RecetaForm from '../components/RecetaForm.vue'
+
+  export default {
+    name: 'CargarRecetaView',
+
+    components: {
+      RecetaForm,
+    },
+
+  }
+</script>
