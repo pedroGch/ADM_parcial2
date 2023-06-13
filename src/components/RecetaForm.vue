@@ -45,6 +45,13 @@
             <v-col cols="12" class="div-h3">
               <h3>Ingredientes</h3>
             </v-col>
+            <v-col cols="12" class="ingrediente-col">
+              <ul>
+                <li v-for="(ing, index) in ingredientes" :key="index">
+                  {{ ing.nombre }} - {{ ing.cantidad }} - {{ ing.unidades }}
+                </li>
+              </ul>
+            </v-col>
             <v-col cols="4">
               <v-text-field
                 cols="6"
@@ -81,6 +88,16 @@
                 @blur="$v.selectUnidades.$touch()"
               ></v-select>
             </v-col>
+
+            <v-row class="btn-agregarIngrediente">
+              <v-btn
+                class="mr-4"            
+                color="secondary"
+                @click="agregarIngrediente"
+              >
+                agregar ingrediente
+              </v-btn>
+            </v-row>
           </v-row>
           <v-row>
             <v-col cols="12">
@@ -153,7 +170,6 @@
         ingredientes: [],
         nombreIngrediente: "",
         cantidadIngrediente: "",
-        unidad_nombre: "",
         mostrar:true,
         mostrarBoton: false,
         preparacion: "",
@@ -238,11 +254,30 @@
         this.selectCategoria = null
         this.preparacion = ''
       },
+      agregarIngrediente(){
+        if (this.nombreIngrediente && this.cantidadIngrediente && this.selectUnidades){
+          let ingrediente = {}
+          ingrediente.nombre = this.nombreIngrediente
+          ingrediente.cantidad = this.cantidadIngrediente
+          ingrediente.unidades = this.selectUnidades
+          this.ingredientes.push(ingrediente)
+
+          this.nombreIngrediente = ""
+          this.cantidadIngrediente = ""
+          this.selectUnidades = ""
+        }
+      }
     }
   }
 </script>
 <style>
   #card-form{
     max-width: 80vw;
+  }
+  .btn-agregarIngrediente{
+    padding: 25px;
+  }
+  .ingrediente-col{
+    margin: 25px 0px;
   }
 </style>
