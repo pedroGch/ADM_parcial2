@@ -86,9 +86,13 @@
             <v-col cols="12">
               <v-textarea
                 v-model="preparacion"
+                :error-messages="preparacionError"                
                 name="paracion"
                 label="Preparación"
                 hint="Escrbí la preparación"
+                required
+                @change="$v.preparacion.$touch()"
+                @blur="$v.preparacion.$touch()"
               ></v-textarea>
             </v-col>
           </v-row>
@@ -132,6 +136,7 @@
       cantidadIngrediente: { required, maxLength: maxLength(10) },
       selectUnidades: { required },
       selectCategoria: { required },
+      preparacion: { required },
 
     },
     components: {
@@ -187,6 +192,12 @@
         if (!this.$v.nombreReceta.$dirty) return errors
         !this.$v.nombreReceta.maxLength && errors.push('Name must be at most 10 characters long')
         !this.$v.nombreReceta.required && errors.push('Se debe ingresar un nombre para la receta.')
+        return errors
+      },
+      preparacionError() {
+        const errors = []
+        if (!this.$v.preparacion.$dirty) return errors
+        !this.$v.preparacion.required && errors.push('La preparación es importante, no te olvides de agregarla.')
         return errors
       },
       nombreIngredienteErrors () {
