@@ -21,7 +21,6 @@
                 cols="6"
                 v-model="nombreReceta"
                 :error-messages="nombreRecetaError"
-                :counter="10"
                 label="Nombre de la receta"
                 required
                 @input="$v.nombreReceta.$touch()"
@@ -47,8 +46,19 @@
             </v-col>
             <v-col cols="12" class="ingrediente-col">
               <ul>
-                <li v-for="(ing, index) in ingredientes" :key="index">
-                  {{ ing.nombre }} - {{ ing.cantidad }} - {{ ing.unidades }}
+                <li cols="12" v-for="(ing, index) in ingredientes" :key="index">
+                  <v-col >{{ ing.nombre }}</v-col>
+                  <v-col >{{ ing.cantidad }}</v-col>
+                  <v-col >{{ ing.unidades }}</v-col>
+                  <v-col >
+                    <v-btn 
+                      icon
+                      @click="borrarIngrediente(index)"
+                    >
+                      <v-icon>mdi-delete</v-icon>
+                    </v-btn>
+                  </v-col>
+
                 </li>
               </ul>
             </v-col>
@@ -56,37 +66,56 @@
               <v-text-field
                 cols="6"
                 v-model="nombreIngrediente"
-                :error-messages="nombreIngredienteErrors"
-                :counter="10"
+
+
                 label="Nombre del ingrediente"
                 required
-                @input="$v.nombreIngrediente.$touch()"
-                @blur="$v.nombreIngrediente.$touch()"
+    
               ></v-text-field>
+              <div class="v-text-field__details" v-if="faltaNombreIngrediente">
+                  <div class="v-messages theme--light error--text" role="alert">
+                    <div class="v-messages__wrapper">
+                      <div class="v-messages__message">No te olvides del nombre del ingrediente.</div>
+                  </div>
+                </div>
+              </div>
             </v-col>
             <v-col cols="4">
               <v-text-field
                 cols="6"
                 v-model="cantidadIngrediente"
-                :error-messages="cantidadIngredienteErrors"
-                :counter="10"
+
+
                 label="Cantidad"
                 required
-                @input="$v.cantidadIngrediente.$touch()"
-                @blur="$v.cantidadIngrediente.$touch()"
+
               ></v-text-field>
+              <div class="v-text-field__details" v-if="faltaCantidadIngrediente">
+                  <div class="v-messages theme--light error--text" role="alert">
+                    <div class="v-messages__wrapper">
+                      <div class="v-messages__message">Te falta la cantidad de ingredientes.</div>
+                  </div>
+                </div>
+              </div>
             </v-col>
             <v-col cols="4">
               <v-select
                 cols="6"
                 v-model="selectUnidades"
                 :items="unidades"
-                :error-messages="selectUnidadesErrors"
+
                 label="Categoria"
                 required
-                @change="$v.selectUnidades.$touch()"
-                @blur="$v.selectUnidades.$touch()"
+
+  
               ></v-select>
+              <div class="v-text-field__details" v-if="faltaUnidadIngrediente">
+                  <div class="v-messages theme--light error--text" role="alert">
+                    <div class="v-messages__wrapper">
+                      <div class="v-messages__message">Tenes que indicar la unidad de medida.</div>
+                  </div>
+                </div>
+              </div>
             </v-col>
 
             <v-row class="btn-agregarIngrediente">
@@ -121,6 +150,7 @@
               <v-file-input
                 show-size
                 truncate-length="15"
+                @change="subirImagen($event)"
               ></v-file-input>
             </v-col>
           </v-row>
@@ -143,18 +173,15 @@
 
 <script>
   import { validationMixin } from 'vuelidate'
-  import { required, maxLength } from 'vuelidate/lib/validators'
+  import { required } from 'vuelidate/lib/validators'
 
   export default {
     mixins: [validationMixin],
     validations: {
-      nombreReceta: { required, maxLength: maxLength(10) },
-      nombreIngrediente: { required, maxLength: maxLength(10) },
-      cantidadIngrediente: { required, maxLength: maxLength(10) },
-      selectUnidades: { required },
+      nombreReceta: { required },
       selectCategoria: { required },
       preparacion: { required },
-
+      
     },
     components: {
 
@@ -163,11 +190,31 @@
     name: 'RecetaForm',
     data(){
       return{
+        imagen_receta: null,
+        faltaNombreIngrediente: false,
+        faltaCantidadIngrediente: false,
+        faltaUnidadIngrediente: false,
         submitStatus: null,
         selectCategoria: null,
         selectUnidades: null,
         nombreReceta: "",
-        ingredientes: [],
+        ingredientes: [
+          {
+            nombre: "huevos",
+            cantidad: "25",
+            unidades: "unidades"
+          },
+          {
+            nombre: "papas",
+            cantidad: "25",
+            unidades: "unidades"
+          },
+          {
+            nombre: "cafe",
+            cantidad: "25",
+            unidades: "unidades"
+          },
+        ],
         nombreIngrediente: "",
         cantidadIngrediente: "",
         mostrar:true,
@@ -191,59 +238,31 @@
       }
     },
     computed: {
+      nombreRecetaError() {
+        const errors = []
+          if (!this.$v.nombreReceta.$dirty) return errors
+          !this.$v.nombreReceta.required && errors.push('Se debe ingresar un nombre para la receta.')
+          return errors
+      },
       selectErrorsCategoria () {
         const errors = []
         if (!this.$v.selectCategoria.$dirty) return errors
         !this.$v.selectCategoria.required && errors.push('La categoría es requerida')
         return errors
       },
-      selectUnidadesErrors (){
-        const errors = []
-        if (!this.$v.selectUnidades.$dirty) return errors
-        !this.$v.selectUnidades.required && errors.push('La unidad es requerida')
-        return errors
-      },
-      nombreRecetaError() {
-        const errors = []
-        if (!this.$v.nombreReceta.$dirty) return errors
-        !this.$v.nombreReceta.maxLength && errors.push('Name must be at most 10 characters long')
-        !this.$v.nombreReceta.required && errors.push('Se debe ingresar un nombre para la receta.')
-        return errors
-      },
       preparacionError() {
         const errors = []
-        if (!this.$v.preparacion.$dirty) return errors
-        !this.$v.preparacion.required && errors.push('La preparación es importante, no te olvides de agregarla.')
-        return errors
-      },
-      nombreIngredienteErrors () {
-        const errors = []
-        if (!this.$v.nombreIngrediente.$dirty) return errors
-        !this.$v.nombreIngrediente.maxLength && errors.push('Name must be at most 10 characters long')
-        !this.$v.nombreIngrediente.required && errors.push('Se debe ingresar un nombre para la receta.')
-        return errors
-      },
-      cantidadIngredienteErrors () {
-        const errors = []
-        if (!this.$v.cantidadIngrediente.$dirty) return errors
-        !this.$v.cantidadIngrediente.maxLength && errors.push('Name must be at most 10 characters long')
-        !this.$v.cantidadIngrediente.required && errors.push('Se debe ingresar un nombre para la receta.')
-        return errors
+          if (!this.$v.preparacion.$dirty) return errors
+          !this.$v.preparacion.required && errors.push('La preparación es importante, no te olvides de agregarla.')
+          return errors
       },
 
     },
     methods:{
       submit () {
         this.$v.$touch()
-        if (this.$v.$invalid) {
-          this.submitStatus = 'ERROR'
-        } else {
-          // do your submit logic here
-
-            this.submitStatus = 'OK'
-            console.log("todo ok")
- 
-        }
+        if (!this.$v.$invalid) this.guardarReceta()
+        
       },
       clear () {
         this.$v.$reset()
@@ -253,8 +272,13 @@
         this.cantidadIngrediente = ''
         this.selectCategoria = null
         this.preparacion = ''
+        this.ingredientes = []
       },
       agregarIngrediente(){
+        this.faltaNombreIngrediente   = !this?.nombreIngrediente   
+        this.faltaCantidadIngrediente = !this?.cantidadIngrediente 
+        this.faltaUnidadIngrediente   = !this?.selectUnidades      
+
         if (this.nombreIngrediente && this.cantidadIngrediente && this.selectUnidades){
           let ingrediente = {}
           ingrediente.nombre = this.nombreIngrediente
@@ -262,22 +286,80 @@
           ingrediente.unidades = this.selectUnidades
           this.ingredientes.push(ingrediente)
 
-          this.nombreIngrediente = ""
+          this.nombreIngrediente   = ""
           this.cantidadIngrediente = ""
-          this.selectUnidades = ""
+          this.selectUnidades      = ""
         }
-      }
+      },
+      borrarIngrediente(indice){
+        if (indice == 0){
+          this.ingredientes.splice(indice, 1)
+        }else if (indice == this.ingredientes.length){
+          this.ingredientes.pop();
+        }
+        this.ingredientes.splice(indice, indice)
+      },
+      guardarReceta(){
+        let receta = {
+          nombre: "",
+          categoria: "",
+          ingredientes: [],
+          preparacion: "",
+          imagen_receta: null,
+          alt: ""   
+        }
+
+        receta.nombre = this.nombreReceta
+        receta.categoria = this.selectCategoria
+        receta.ingredientes = this.ingredientes
+        receta.preparacion = this.preparacion
+        receta.alt = "imagen representativa de la receta " + receta.nombre
+        if (this.imagen_receta){
+          receta.imagen_receta = this.imagen_receta
+        }else{
+          receta.imagen_receta = "/img/receta-predeterminada.jpg"
+        }
+        this.actualizarLocalStorage(receta)
+      },
+      actualizarLocalStorage(unaReceta){
+        let libroDeRecetas = [];
+        let jsonlibroDeRecetas = localStorage.getItem('libroDeRecetas');
+        if (jsonlibroDeRecetas != undefined){
+          libroDeRecetas = JSON.parse(jsonlibroDeRecetas);
+        }
+
+        libroDeRecetas.push(unaReceta);
+        localStorage.setItem('libroDeRecetas', JSON.stringify(libroDeRecetas));
+
+        this.clear()
+        this.ingredientes = []
+      },
+      subirImagen:function (file){
+
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(file.target.files[0])
+
+        fileReader.onload = (event) => {
+          this.imagen_receta = event.target.result
+          
+        };
+      },
     }
   }
 </script>
-<style>
+<style scoped>
   #card-form{
     max-width: 80vw;
   }
   .btn-agregarIngrediente{
     padding: 25px;
   }
-  .ingrediente-col{
-    margin: 25px 0px;
+  
+  ul{
+    list-style-type:none;
   }
+  ul li {
+    display: flex;
+  }
+  
 </style>
