@@ -157,8 +157,10 @@
               </v-btn>
     
             <v-spacer></v-spacer>
-            <v-btn icon>
-              <v-icon>mdi-delete</v-icon>
+            <v-btn icon @click="eliminarRecetaPropia(i)">
+              <v-icon
+                title="Borrar receta"                
+              >mdi-delete</v-icon>
             </v-btn>
             <v-btn icon>
               <v-icon>mdi-pen</v-icon>
@@ -323,6 +325,15 @@
         localStorage.setItem('libroDeRecetas', JSON.stringify(this.libroDeCocina));
         
         this.libroDeCocina[indice].guardado ? this.guardarReceta(this.libroDeCocina[indice]) : this.quitarRecetaGuardada(this.libroDeCocina[indice])
+      },
+      eliminarRecetaPropia(indice){
+        if (indice == 0){
+          this.miLibroDeRecetas.splice(indice, 1)
+        }else if (indice == this.miLibroDeRecetas.length){
+          this.miLibroDeRecetas.pop();
+        }
+        this.miLibroDeRecetas.splice(indice, indice)
+        localStorage.setItem('miLibroDeRecetas', JSON.stringify(this.miLibroDeRecetas))
       }
     },
     mounted: function(){ //al insertar al DOM    
