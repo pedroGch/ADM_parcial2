@@ -34,7 +34,11 @@
                 align="center"
                 class="mx-0"
               >
-                <v-btn icon>
+                <v-btn 
+                  @click="darMeGusta(i)"
+                  :class="{'megusta' : receta.meGusta}"
+                  icon
+                >
                   <v-icon>mdi-heart</v-icon>
                 </v-btn>
     
@@ -46,7 +50,7 @@
     
             <v-divider class="mx-4"></v-divider>
     
-          <v-card-title>Encontralo como</v-card-title>
+          <v-card-title>Esta receta lleva</v-card-title>
     
           <v-card-text>
             <v-chip-group              
@@ -72,11 +76,11 @@
               </v-btn>
     
             <v-spacer></v-spacer>
-            <v-btn icon>
+            <v-btn 
+              :class="{'meloquedo' : receta.meGusta}"
+              icon
+            >
               <v-icon>mdi-bookmark</v-icon>
-            </v-btn>
-            <v-btn icon>
-              <v-icon>mdi-share-variant</v-icon>
             </v-btn>
           </v-card-actions>
             </v-card>
@@ -153,10 +157,10 @@
     
             <v-spacer></v-spacer>
             <v-btn icon>
-              <v-icon>mdi-bookmark</v-icon>
+              <v-icon>mdi-delete</v-icon>
             </v-btn>
             <v-btn icon>
-              <v-icon>mdi-share-variant</v-icon>
+              <v-icon>mdi-pen</v-icon>
             </v-btn>
           </v-card-actions>
             </v-card> 
@@ -281,7 +285,8 @@
         this.dialog = false
       },
       darMeGusta: function(indice){
-        console.log(this.libroDeCocina[indice].meGusta)
+        !this.libroDeCocina[indice].meGusta ? this.libroDeCocina[indice].cantMeGusta = this.libroDeCocina[indice].cantMeGusta + 1 : this.libroDeCocina[indice].cantMeGusta = this.libroDeCocina[indice].cantMeGusta - 1
+        
         this.libroDeCocina[indice].meGusta = !this.libroDeCocina[indice].meGusta
         
       }
@@ -317,5 +322,11 @@
   .div-h3 {
     background-color: #775653;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  }
+  .megusta{
+    background-color:pink
+  }
+  .meloquedo{
+    background-color: goldenrod;
   }
 </style>
