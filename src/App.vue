@@ -68,7 +68,7 @@ export default {
         items: [
           { title: 'Home', icon: 'mdi-view-dashboard',ruta:'/' },
           { title: 'Cargar receta', icon: 'mdi-pen',ruta:'/cargarReceta' },
-          { title: 'Recetas guardadas', icon: 'mdi-heart',ruta:'/' },
+          { title: 'Recetas guardadas', icon: 'mdi-bookmark',ruta:'/recetasGuardadas' },
         ],
       }
     },
