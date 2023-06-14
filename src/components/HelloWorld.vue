@@ -1,133 +1,205 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" class="text-center">
-        <h2>Bienvenida {{usuario | mayuscula}} a tu libro de recetas</h2>
-      </v-col>
-      <v-col cols="12" class=" div-h3 p-2 mt-5 d-flex">
-        <div class="ps-2 pt-1">
-          <img src="./../../public/img/icons/star_icon60.png" alt="icono estrella">
-        </div>
-        <h3 color="textoGris">Recetas recomendadas</h3>
-      </v-col>
-      <v-card
-        
-        class="mx-auto my-12"
-        max-width="374"
-        v-for = "(receta, i) in libroDeCocina" :key="i"
-      >
-
-      <v-img
-        height="250"
-        :src="receta.imagen_ruta"
-      ></v-img>
-
-      <v-card-title>{{receta.nombre | mayusculaPrimeraLetra}}</v-card-title>
-
-      <v-card-text>
-        <div class="mb-3 text-subtitle-1">
-          Receta {{ receta.categoria }}
-        </div>   
-        <v-row
-          align="center"
-          class="mx-0"
-        >
-          <v-btn icon>
-            <v-icon>mdi-heart</v-icon>
-          </v-btn>
-
-          <div class="grey--text ms-4">
-            {{receta.cantMeGusta}}
-          </div>
+      <v-container>
+        <v-col cols="12" class="text-center">
+          <h2>Bienvenida {{usuario | mayuscula}} a tu libro de recetas</h2>
+        </v-col>
+        <v-row>
+          <v-row>
+            <v-col cols="12" class=" div-h3 p-2 mt-5 d-flex">
+              <div class="ps-2 pt-1">
+                <img src="./../../public/img/icons/star_icon60.png" alt="icono estrella">
+              </div>
+              <h3 color="textoGris">Recetas recomendadas</h3>
+            </v-col>
+            <v-card
+              class="mx-auto my-12"
+              max-width="374"
+              v-for = "(receta, i) in libroDeCocina" :key="i"
+            >
+    
+            <v-img
+              height="250"
+              :src="receta.imagen_ruta"
+            ></v-img>
+    
+            <v-card-title>{{receta.nombre | mayusculaPrimeraLetra}}</v-card-title>
+    
+            <v-card-text>
+              <div class="mb-3 text-subtitle-1">
+                Receta {{ receta.categoria }}
+              </div>   
+              <v-row
+                align="center"
+                class="mx-0"
+              >
+                <v-btn icon>
+                  <v-icon>mdi-heart</v-icon>
+                </v-btn>
+    
+                <div class="grey--text ms-4">
+                  {{receta.cantMeGusta}}
+                </div>
+              </v-row>
+            </v-card-text>
+    
+            <v-divider class="mx-4"></v-divider>
+    
+          <v-card-title>Encontralo como</v-card-title>
+    
+          <v-card-text>
+            <v-chip-group              
+              column
+            >
+              <v-chip
+                v-for = "(ingrediente, index) in receta.ingredientes" :key="index"
+              >
+                {{ingrediente.nombre}}
+              </v-chip>
+    
+            </v-chip-group>
+          </v-card-text>
+    
+          <v-card-actions>
+    
+            <v-btn
+                color="secondary"
+                dark
+                @click.stop="seleccionarReceta(receta)"
+              >
+                ver más
+              </v-btn>
+    
+            <v-spacer></v-spacer>
+            <v-btn icon>
+              <v-icon>mdi-bookmark</v-icon>
+            </v-btn>
+            <v-btn icon>
+              <v-icon>mdi-share-variant</v-icon>
+            </v-btn>
+          </v-card-actions>
+            </v-card>
+          </v-row>
         </v-row>
-      </v-card-text>
+      </v-container>
 
-      <v-divider class="mx-4"></v-divider>
-
-    <v-card-title>Encontralo como</v-card-title>
-
-    <v-card-text>
-      <v-chip-group
-        
-        active-class="deep-purple accent-4 white--text"
-        column
-      >
-        <v-chip>dulce de leche</v-chip>
-
-        <v-chip>harinas</v-chip>
-
-        <v-chip>panqueques</v-chip>
-
-        <v-chip>merienda</v-chip>
-      </v-chip-group>
-    </v-card-text>
-
-    <v-card-actions>
-
-      <v-btn
-          color="secondary"
-          dark
-          @click.stop="seleccionarReceta(receta)"
-        >
-          ver más
-        </v-btn>
-
-      <v-spacer></v-spacer>
-      <v-btn icon>
-        <v-icon>mdi-bookmark</v-icon>
-      </v-btn>
-      <v-btn icon>
-        <v-icon>mdi-share-variant</v-icon>
-      </v-btn>
-    </v-card-actions>
-  </v-card>
-
+      <v-container>
+        <v-row>
+          <v-row>
+            <v-col cols="12" class=" div-h3 p-2 mt-5 d-flex">
+              <div class="ps-2 pt-1">
+                <img src="./../../public/img/icons/star_icon60.png" alt="icono estrella">
+              </div>
+              <h3 color="textoGris">Mis Recetas <span v-if="miLibroDeRecetas.length == 0">(Aún no tenes recetas cargadas)</span></h3>
+            </v-col>
+            <v-card
+              class="mx-6 my-12"
+              max-width="374"
+              v-for = "(receta, i) in miLibroDeRecetas" :key="i"
+            >
+    
+            <v-img
+              height="250"
+              :src="receta.imagen_ruta"
+            ></v-img>
+    
+            <v-card-title>{{receta.nombre | mayusculaPrimeraLetra}}</v-card-title>
+    
+            <v-card-text>
+              <div class="mb-3 text-subtitle-1">
+                Receta {{ receta.categoria }}
+              </div>   
+              <v-row
+                align="center"
+                class="mx-0"
+              >
+                <v-btn icon>
+                  <v-icon>mdi-heart</v-icon>
+                </v-btn>
+    
+                <div class="grey--text ms-4">
+                  {{receta.cantMeGusta}}
+                </div>
+              </v-row>
+            </v-card-text>
+    
+            <v-divider class="mx-4"></v-divider>
+    
+          <v-card-title>Encontralo como</v-card-title>
+    
+          <v-card-text>
+            <v-chip-group              
+              column
+            >
+              <v-chip
+                v-for = "(ingrediente, index) in receta.ingredientes" :key="index"
+              >
+                {{ingrediente.nombre}}
+              </v-chip>
+    
+            </v-chip-group>
+          </v-card-text>
+    
+          <v-card-actions>
+    
+            <v-btn
+                color="secondary"
+                dark
+                @click.stop="seleccionarReceta(receta)"
+              >
+                ver más
+              </v-btn>
+    
+            <v-spacer></v-spacer>
+            <v-btn icon>
+              <v-icon>mdi-bookmark</v-icon>
+            </v-btn>
+            <v-btn icon>
+              <v-icon>mdi-share-variant</v-icon>
+            </v-btn>
+          </v-card-actions>
+            </v-card> 
+          </v-row>
+        </v-row>
+      </v-container>
 
       <v-dialog
-      v-model="dialog"
-      persistent
-    >
-      <v-card>
-        <v-card-title class="text-h5">
-          {{ recetaSeleccionada.nombre }}
-        </v-card-title>
-        <v-divider class="my-2"></v-divider>
-        <v-card-text>
-          <ul>
-            <li v-for="(i, index ) in ingredientesSleccionados" :key="index" >
-              {{ i.nombre }} - {{ i.cantidad }} - {{ i.unidad }}
-            </li>
-          </ul>
-        </v-card-text>
-        <v-card-text>
-          {{ recetaSeleccionada.preparacion }}
-        </v-card-text>
-        <v-divider></v-divider>
-        <v-card-actions>
-          <v-spacer></v-spacer>
+        v-model="dialog"
+        persistent
+      >
+        <v-card>
+          <v-card-title class="text-h5">
+            {{ recetaSeleccionada.nombre }}
+          </v-card-title>
+          <v-divider class="my-2"></v-divider>
+          <v-card-text>
+            <ul>
+              <li v-for="(i, index ) in ingredientesSleccionados" :key="index" >
+                {{ i.nombre }} - {{ i.cantidad }} - {{ i.unidad }}
+              </li>
+            </ul>
+          </v-card-text>
+          <v-card-text>
+            {{ recetaSeleccionada.preparacion }}
+          </v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-spacer></v-spacer>
 
-          <v-btn
-          color="secondary"
-          text
-          @click="reiniciarIngredientes()"
-        >
-          Cerrar
-        </v-btn>
+            <v-btn
+            color="secondary"
+            text
+            @click="reiniciarIngredientes()"
+          >
+            Cerrar
+          </v-btn>
 
 
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <v-row>
-      <v-col cols="12" class=" div-h3 p-2 mt-5 d-flex">
-        <div class="ps-2 pt-1">
-          <img src="./../../public/img/icons/star_icon60.png" alt="icono estrella">
-        </div>
-        <h3 color="textoGris">Mis Recetas <span v-if="miLibroDeRecetas.length == 0">(Aún no tenes recetas cargadas)</span></h3>
-      </v-col>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-row>
-  </v-row>
   </v-container>
 </template>
 
@@ -217,7 +289,7 @@
     mounted: function(){ //al insertar al DOM    
       let jsonlibroDeRecetas = localStorage.getItem('libroDeRecetas');
 
-      if (jsonlibroDeRecetas != undefined || jsonlibroDeRecetas != undefined){
+      if (jsonlibroDeRecetas != null || jsonlibroDeRecetas != undefined){
         let libroDeRecetas = JSON.parse(jsonlibroDeRecetas)
         this.actualizarLibroDeRecetas(libroDeRecetas)
       }
