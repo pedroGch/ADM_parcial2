@@ -148,6 +148,7 @@
             </v-col>
             <v-col cols="12">
               <v-file-input
+                v-model="img"
                 show-size
                 truncate-length="15"
                 @change="subirImagen($event)"
@@ -191,6 +192,7 @@
     data(){
       return{
         imagen_receta: null,
+        img: null,
         faltaNombreIngrediente: false,
         faltaCantidadIngrediente: false,
         faltaUnidadIngrediente: false,
@@ -272,7 +274,8 @@
         this.cantidadIngrediente = ''
         this.selectCategoria = null
         this.preparacion = ''
-        this.ingredientes = []
+        this.ingredientes = [],
+        this.img = null
       },
       agregarIngrediente(){
         this.faltaNombreIngrediente   = !this?.nombreIngrediente   
@@ -305,7 +308,8 @@
           categoria: "",
           ingredientes: [],
           preparacion: "",
-          imagen_receta: null,
+          cantMeGusta: 0,
+          imagen_ruta: null,
           alt: ""   
         }
 
@@ -315,9 +319,9 @@
         receta.preparacion = this.preparacion
         receta.alt = "imagen representativa de la receta " + receta.nombre
         if (this.imagen_receta){
-          receta.imagen_receta = this.imagen_receta
+          receta.imagen_ruta = this.imagen_receta
         }else{
-          receta.imagen_receta = "/img/receta-predeterminada.jpg"
+          receta.imagen_ruta = "/img/receta-predeterminada.jpg"
         }
         this.actualizarLocalStorage(receta)
       },
@@ -335,9 +339,8 @@
         this.ingredientes = []
       },
       subirImagen:function (file){
-
         const fileReader = new FileReader();
-        fileReader.readAsDataURL(file.target.files[0])
+        fileReader.readAsDataURL(file)
 
         fileReader.onload = (event) => {
           this.imagen_receta = event.target.result
