@@ -290,11 +290,31 @@
         !this.libroDeCocina[indice].meGusta ? this.libroDeCocina[indice].cantMeGusta = this.libroDeCocina[indice].cantMeGusta + 1 : this.libroDeCocina[indice].cantMeGusta = this.libroDeCocina[indice].cantMeGusta - 1
         this.libroDeCocina[indice].meGusta = !this.libroDeCocina[indice].meGusta
 
-        //HAY QUE ACTUALIZAR EL LOCAL STORAGE PARA QUE SE GUARDE EL GUARDADO
         localStorage.setItem('libroDeRecetas', JSON.stringify(this.libroDeCocina));
 
         
         
+      },
+      guardarReceta: function(receta){
+        let libro = [];
+        let jsonMisRecetasGuardadas = localStorage.getItem('misRecetasGuardadas');
+        if (jsonMisRecetasGuardadas != undefined){
+          libro = JSON.parse(jsonMisRecetasGuardadas)
+        }
+        libro.push(receta)
+        localStorage.setItem('misRecetasGuardadas', JSON.stringify(libro))
+      },
+      quitarRecetaGuardada: function (receta){
+        let libro = JSON.parse(localStorage.getItem('misRecetasGuardadas'))
+
+        if (libro.length == 1){
+          libro = []
+        }else{
+          libro = libro.filter((l) => {return l.nombre != receta.nombre})
+        }
+
+        localStorage.setItem('misRecetasGuardadas', JSON.stringify(libro))
+
       },
       quedarmelo: function(indice){        
         //cambio el estado de guardado
@@ -302,27 +322,7 @@
         //actualizo local storage
         localStorage.setItem('libroDeRecetas', JSON.stringify(this.libroDeCocina));
         
-        if (this.libroDeCocina[indice].guardado){
-          //hay que pasar esto a una funcion
-          let libro
-          libro = localStorage.getItem('misRecetasGuardadas')   
-          if (libro != undefined && libro != null){
-            libro = []
-          }else {          
-            libro = JSON.parse(libro)          
-          }
-          libro.push(this.libroDeCocina[indice])
-          localStorage.setItem('misRecetasGuardadas', JSON.stringify(libro))
-          //------------------------------------------------------------------
-        }else{
-          let libroDeRecetas = [];
-          let jsonlibroDeRecetas = localStorage.getItem('misRecetasGuardadas');
-          libroDeRecetas = JSON.parse(jsonlibroDeRecetas);
-
-          //aplicamos un filtro para que retorne el arreglo 
-
-        }
-        
+        this.libroDeCocina[indice].guardado ? this.guardarReceta(this.libroDeCocina[indice]) : this.quitarRecetaGuardada(this.libroDeCocina[indice])
       }
     },
     mounted: function(){ //al insertar al DOM    
@@ -332,8 +332,9 @@
         let libroDeRecetas = JSON.parse(jsonlibroDeRecetas)
         this.actualizarLibroDeRecetas(libroDeRecetas)
       }
-      
-      this.libroDeCocina = JSON.parse(localStorage.getItem('libroDeRecetas'))
+      if (localStorage.getItem('libroDeRecetas') != undefined){
+        this.libroDeCocina = JSON.parse(localStorage.getItem('libroDeRecetas'))
+      }
     },
     filters:{
       mayuscula:function (value){
