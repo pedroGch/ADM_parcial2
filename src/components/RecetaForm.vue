@@ -327,13 +327,13 @@
       },
       actualizarLocalStorage(unaReceta){
         let libroDeRecetas = [];
-        let jsonlibroDeRecetas = localStorage.getItem('libroDeRecetas');
+        let jsonlibroDeRecetas = localStorage.getItem('miLibroDeRecetas');
         if (jsonlibroDeRecetas != undefined){
           libroDeRecetas = JSON.parse(jsonlibroDeRecetas);
         }
 
         libroDeRecetas.push(unaReceta);
-        localStorage.setItem('libroDeRecetas', JSON.stringify(libroDeRecetas));
+        localStorage.setItem('miLibroDeRecetas', JSON.stringify(libroDeRecetas));
 
         this.clear()
         this.ingredientes = []
