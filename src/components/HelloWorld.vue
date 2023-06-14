@@ -77,7 +77,8 @@
     
             <v-spacer></v-spacer>
             <v-btn 
-              :class="{'meloquedo' : receta.meGusta}"
+              @click="quedarmelo(i)"
+              :class="{'meloquedo' : receta.guardado}"
               icon
             >
               <v-icon>mdi-bookmark</v-icon>
@@ -217,8 +218,7 @@
       miLibroDeRecetas: [],
       ingredientesSleccionados:[],
       recetaSeleccionada: {},
-      libroDeCocina: [
-        {
+      libroDeCocina: [{
           nombre:"panqueques",
           categoria:"dulce",
           cantMeGusta: 145,
@@ -236,8 +236,10 @@
           Algunas opciones de relleno pueden ser clásico con dulce de leche sin azúcar, mermelada de duraznos light con peras frescas, frutos rojos y todas las que te animes a probar.`,
           imagen_ruta: "/img/panqueque.jpg",
           alt: "imagen de de panqueques",
-          meGusta: false
+          meGusta: false,
+          guardado:false
         },
+
         {
           nombre:"salsa de hongos de pino",
           categoria:"salada",
@@ -261,9 +263,9 @@
           `,
           imagen_ruta: "/img/salsa_hongos.jpg",
           alt: "imagen ilustrativa de salsa de hongos de pino",
-          meGusta: false
-        }
-      ],
+          meGusta: false,
+          guardado: false
+        }],
       usuario: "mabel",
     }
     },
@@ -286,18 +288,52 @@
       },
       darMeGusta: function(indice){
         !this.libroDeCocina[indice].meGusta ? this.libroDeCocina[indice].cantMeGusta = this.libroDeCocina[indice].cantMeGusta + 1 : this.libroDeCocina[indice].cantMeGusta = this.libroDeCocina[indice].cantMeGusta - 1
-        
         this.libroDeCocina[indice].meGusta = !this.libroDeCocina[indice].meGusta
+
+        //HAY QUE ACTUALIZAR EL LOCAL STORAGE PARA QUE SE GUARDE EL GUARDADO
+        localStorage.setItem('libroDeRecetas', JSON.stringify(this.libroDeCocina));
+
+        
+        
+      },
+      quedarmelo: function(indice){        
+        //cambio el estado de guardado
+        this.libroDeCocina[indice].guardado = !this.libroDeCocina[indice].guardado
+        //actualizo local storage
+        localStorage.setItem('libroDeRecetas', JSON.stringify(this.libroDeCocina));
+        
+        if (this.libroDeCocina[indice].guardado){
+          //hay que pasar esto a una funcion
+          let libro
+          libro = localStorage.getItem('misRecetasGuardadas')   
+          if (libro != undefined && libro != null){
+            libro = []
+          }else {          
+            libro = JSON.parse(libro)          
+          }
+          libro.push(this.libroDeCocina[indice])
+          localStorage.setItem('misRecetasGuardadas', JSON.stringify(libro))
+          //------------------------------------------------------------------
+        }else{
+          let libroDeRecetas = [];
+          let jsonlibroDeRecetas = localStorage.getItem('misRecetasGuardadas');
+          libroDeRecetas = JSON.parse(jsonlibroDeRecetas);
+
+          //aplicamos un filtro para que retorne el arreglo 
+
+        }
         
       }
     },
     mounted: function(){ //al insertar al DOM    
-      let jsonlibroDeRecetas = localStorage.getItem('libroDeRecetas');
+      let jsonlibroDeRecetas = localStorage.getItem('miLibroDeRecetas');
 
       if (jsonlibroDeRecetas != null || jsonlibroDeRecetas != undefined){
         let libroDeRecetas = JSON.parse(jsonlibroDeRecetas)
         this.actualizarLibroDeRecetas(libroDeRecetas)
       }
+      
+      this.libroDeCocina = JSON.parse(localStorage.getItem('libroDeRecetas'))
     },
     filters:{
       mayuscula:function (value){
