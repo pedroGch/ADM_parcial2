@@ -1,6 +1,5 @@
 <template>
   <v-container>
-
     <v-row class="text-center mt-3">
     <v-row >
       <v-card
@@ -39,12 +38,25 @@
                 @blur="$v.selectCategoria.$touch()"
               ></v-select>
             </v-col>
-          </v-row>
+          </v-row>          
           <v-row class="py-4">
             <v-col cols="12" class="div-h3">
               <h3>Ingredientes</h3>
             </v-col>
             <v-col cols="12" class="ingrediente-col">
+              <v-alert
+                v-model="alert"
+                dismissible
+                color="red"
+                border="left"
+                elevation="2"
+                colored-border
+                type="error"
+                prominent
+                icon="mdi-cloud-alert"
+              >
+                Se debe agregar al menos <strong>3</strong> ingredientes
+              </v-alert>
               <ul>
                 <li cols="12" v-for="(ing, index) in ingredientes" :key="index">
                   <v-col >{{ ing.nombre }}</v-col>
@@ -170,11 +182,13 @@
     </v-row>
     </v-row>
   </v-container>
+  
 </template>
 
 <script>
   import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
+  import Swal from 'sweetalert2'
 
   export default {
     mixins: [validationMixin],
@@ -191,6 +205,7 @@
     name: 'RecetaForm',
     data(){
       return{
+        alert: false,
         imagen_receta: null,
         img: null,
         faltaNombreIngrediente: false,
@@ -263,7 +278,8 @@
     methods:{
       submit () {
         this.$v.$touch()
-        if (!this.$v.$invalid) this.guardarReceta()
+        if (this.ingredientes.length < 3) this.alert = true
+        if (!this.$v.$invalid && !this.alert) this.guardarReceta()
         
       },
       clear () {
@@ -310,7 +326,7 @@
           preparacion: "",
           cantMeGusta: 0,
           imagen_ruta: null,
-          alt: ""   
+          alt: "",
         }
 
         receta.nombre = this.nombreReceta
@@ -324,6 +340,11 @@
           receta.imagen_ruta = "/img/receta-predeterminada.jpg"
         }
         this.actualizarLocalStorage(receta)
+        Swal.fire(
+            'Muy bien!',
+            'Tu receta ya fue guardada!',
+            'success'
+        )
       },
       actualizarLocalStorage(unaReceta){
         let libroDeRecetas = [];
