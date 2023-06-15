@@ -345,6 +345,7 @@
             'Tu receta ya fue guardada!',
             'success'
         )
+        this.$router.push({ path: "/" })
       },
       actualizarLocalStorage(unaReceta){
         let libroDeRecetas = [];
