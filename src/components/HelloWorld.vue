@@ -162,7 +162,7 @@
                 title="Borrar receta"                
               >mdi-delete</v-icon>
             </v-btn>
-            <v-btn icon @click="editarReceta(receta)">
+            <v-btn icon @click="editarReceta(i)">
               <v-icon>mdi-pen</v-icon>
             </v-btn>
           </v-card-actions>
@@ -335,9 +335,8 @@
         this.miLibroDeRecetas.splice(indice, indice)
         localStorage.setItem('miLibroDeRecetas', JSON.stringify(this.miLibroDeRecetas))
       },
-      editarReceta(receta){
-        
-        this.$router.push({ name: "editarReceta", params: { RecetaParaEditar: receta } });
+      editarReceta(indice){
+        this.$router.push({ name: "formReceta", params: { id: indice } });
       }
     },
     mounted: function(){ //al insertar al DOM    
