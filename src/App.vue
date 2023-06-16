@@ -67,7 +67,7 @@ export default {
         drawer: null,
         items: [
           { title: 'Home', icon: 'mdi-view-dashboard',ruta:'/' },
-          { title: 'Cargar receta', icon: 'mdi-pen',ruta:'/cargarReceta' },
+          { title: 'Cargar receta', icon: 'mdi-pen',ruta:'/formReceta' },
           { title: 'Recetas guardadas', icon: 'mdi-bookmark',ruta:'/recetasGuardadas' },
         ],
       }
