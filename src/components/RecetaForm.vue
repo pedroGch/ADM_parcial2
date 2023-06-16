@@ -198,8 +198,8 @@
       preparacion: { required },
       
     },
-    components: {
-
+    props: {
+      editarReceta:null
     },
     
     name: 'RecetaForm',
@@ -252,6 +252,15 @@
           "lt",
           "ml"
         ],
+      }
+    },
+    mounted: function(){
+      
+      if(this.editarReceta != undefined){
+        this.nombreReceta = this.editarReceta.nombre
+        this.selectCategoria = this.editarReceta.categoria
+        this.preparacion = this.editarReceta.preparacion
+        this.ingredientes = this.editarReceta.ingredientes 
       }
     },
     computed: {
