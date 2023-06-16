@@ -13,8 +13,8 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/cargarReceta',
-    name: 'cargarReceta',
+    path: '/formReceta/:id?',
+    name: 'formReceta',
     component: CargarRecetaView
   },
   {
