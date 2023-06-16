@@ -21,6 +21,12 @@ const routes = [
     path: '/recetasGuardadas',
     name: 'recetasGuardadas',
     component: RecetasGuardadas
+  },
+  {
+    path: '/editarReceta',
+    name: 'editarReceta',
+    props: true,
+    component: CargarRecetaView
   }
 ]
 
