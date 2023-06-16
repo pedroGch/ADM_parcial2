@@ -1,5 +1,10 @@
 <template>
-  <receta-form></receta-form>
+  <div>
+  <receta-form
+    :editarReceta="RecetaParaEditar"
+  ></receta-form>
+
+</div>
 </template>
 
 <script>
@@ -11,6 +16,8 @@
     components: {
       RecetaForm,
     },
-
+    props:{
+      RecetaParaEditar: null
+    }
   }
 </script>
