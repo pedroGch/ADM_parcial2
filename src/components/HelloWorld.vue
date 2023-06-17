@@ -336,6 +336,7 @@
         localStorage.setItem('miLibroDeRecetas', JSON.stringify(this.miLibroDeRecetas))
       },
       editarReceta(indice){
+        
         this.$router.push({ name: "formReceta", params: { id: indice } });
       }
     },

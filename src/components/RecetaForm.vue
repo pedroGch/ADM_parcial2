@@ -199,7 +199,10 @@
       
     },
     props: {
-      editarReceta:null
+      editarReceta:{
+        type : Object,
+        default: null
+      }
     },
     
     name: 'RecetaForm',
@@ -253,14 +256,17 @@
           "ml"
         ],
       }
-    },
-    mounted: function(){
-      
-      if(this.editarReceta != undefined){
-        this.nombreReceta = this.editarReceta.nombre
-        this.selectCategoria = this.editarReceta.categoria
-        this.preparacion = this.editarReceta.preparacion
-        this.ingredientes = this.editarReceta.ingredientes 
+    }, 
+    watch: {
+      editarReceta(){
+        console.log(this.editarReceta)
+        if(this.editarReceta){
+          console.log("entre al mounted del formReceta")
+          this.nombreReceta = this.editarReceta.nombre
+          this.selectCategoria = this.editarReceta.categoria
+          this.preparacion = this.editarReceta.preparacion
+          this.ingredientes = this.editarReceta.ingredientes 
+        }
       }
     },
     computed: {
@@ -363,7 +369,11 @@
           libroDeRecetas = JSON.parse(jsonlibroDeRecetas);
         }
 
-        libroDeRecetas.push(unaReceta);
+        if (this.editarReceta != null){
+          libroDeRecetas[this.$route.params.id] = unaReceta
+        }else{
+          libroDeRecetas.push(unaReceta);
+        }
         localStorage.setItem('miLibroDeRecetas', JSON.stringify(libroDeRecetas));
 
         this.clear()

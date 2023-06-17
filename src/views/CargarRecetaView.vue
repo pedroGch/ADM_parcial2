@@ -1,7 +1,7 @@
 <template>
   <div>
   <receta-form
-    :editarReceta="RecetaParaEditar"
+    :editarReceta="editarReceta"
   ></receta-form>
 
 </div>
@@ -21,14 +21,15 @@
     },
     data(){
       return{
-        RecetaParaEditar: null,
+        editarReceta: null,
       }
     },
     mounted: function(){
       //si me llega por parametro un id para editar lo busco en mi libro de recetas y lo envio como una prop
-      if (this.$route.idEditar != undefined){
+      if (this.$route.params.id != undefined){
         let misRecetas = JSON.parse(localStorage.getItem('miLibroDeRecetas'))
-        this.RecetaParaEditar = misRecetas[this.$route.idEditar]
+        this.editarReceta = misRecetas[this.$route.params.id]
+
       }
 
     }
