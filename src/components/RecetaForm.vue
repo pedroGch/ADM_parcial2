@@ -259,9 +259,7 @@
     }, 
     watch: {
       editarReceta(){
-        console.log(this.editarReceta)
         if(this.editarReceta){
-          console.log("entre al mounted del formReceta")
           this.nombreReceta = this.editarReceta.nombre
           this.selectCategoria = this.editarReceta.categoria
           this.preparacion = this.editarReceta.preparacion
