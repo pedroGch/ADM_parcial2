@@ -211,6 +211,7 @@
 </template>
 
 <script>
+  import Swal from 'sweetalert2'
   export default {
     name: 'HelloWorld',
 
@@ -327,6 +328,27 @@
         this.libroDeCocina[indice].guardado ? this.guardarReceta(this.libroDeCocina[indice]) : this.quitarRecetaGuardada(this.libroDeCocina[indice])
       },
       eliminarRecetaPropia(indice){
+        Swal.fire({
+          title: '¿Estas seguro?',
+          text: "Queres eliminar esta receta",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#F6E4E3',
+          cancelButtonColor: '#775653',
+          confirmButtonText: 'Sí, quiero',
+          cancelButtonText: 'Mejor no'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.confirmarEliminar(indice)
+            Swal.fire(
+              'Borrado!',
+              'La receta fue eliminada.',
+              'success'
+            )
+          }
+        })
+      },
+      confirmarEliminar(indice){
         if (indice == 0){
           this.miLibroDeRecetas.splice(indice, 1)
         }else if (indice == this.miLibroDeRecetas.length){
