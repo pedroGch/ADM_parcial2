@@ -116,7 +116,7 @@
                 v-model="selectUnidades"
                 :items="unidades"
 
-                label="Categoria"
+                label="Unidad"
                 required
 
   
