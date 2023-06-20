@@ -218,23 +218,7 @@
         selectCategoria: null,
         selectUnidades: null,
         nombreReceta: "",
-        ingredientes: [
-          {
-            nombre: "huevos",
-            cantidad: "25",
-            unidades: "unidades"
-          },
-          {
-            nombre: "papas",
-            cantidad: "25",
-            unidades: "unidades"
-          },
-          {
-            nombre: "cafe",
-            cantidad: "25",
-            unidades: "unidades"
-          },
-        ],
+        ingredientes: [ ],
         nombreIngrediente: "",
         cantidadIngrediente: "",
         mostrar:true,
