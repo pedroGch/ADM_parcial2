@@ -4,7 +4,7 @@
       <v-app-bar-nav-icon color="secondary" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-spacer></v-spacer>
       <!-- <router-link :to= "'/'" > -->
-        <v-icon color="secondary">mdi-home</v-icon>
+       
         <v-toolbar-title color="textoNegro">Hoy, cocino yo!</v-toolbar-title>
       <!-- </router-link> -->
       <v-spacer></v-spacer>
